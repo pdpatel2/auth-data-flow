@@ -4,7 +4,8 @@ var express = require('express'),
 	router = express.Router(),
 	path = require('path');
 
-var rootPath = path.join(__dirname, '..', '..');
+var rootPath = path.join(__dirname, '..', '..'); 
+//does this mean that everything in auther is statically served up?
 
 var publicPath = path.join(rootPath, 'public');
 

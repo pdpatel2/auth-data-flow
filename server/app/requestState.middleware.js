@@ -1,5 +1,7 @@
 'use strict'; 
 
+//customized body parser
+
 var router = require('express').Router();
 
 router.use(function (req, res, next) {
@@ -9,7 +11,9 @@ router.use(function (req, res, next) {
 	});
 	req.on('end', function () {
 		bodyString = bodyString || '{}';
+		//creates JSON object
 		req.body = eval('(' + bodyString + ')');
+		//create body property on request
 		next();
 	});
 });
