@@ -19,6 +19,17 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Google authentication and login 
+app.get('/auth/google', passport.authenticate('google', { scope : 'email' }));
+
+// handle the callback after Google has authenticated the user
+app.get('/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect : '/',
+    failureRedirect : '/' // or wherever
+  })
+);
+
 // app.use(function (req, res, next) {
 //   if (!req.session.counter) req.session.counter = 0;
 //   console.log('counter', ++req.session.counter);
