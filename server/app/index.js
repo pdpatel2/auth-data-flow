@@ -12,6 +12,7 @@ app.use(require('./requestState.middleware'));
 app.use(session({
     // this mandatory configuration ensures that session IDs are not predictable
     secret: 'tongiscool'
+    //cookie: { maxAge: 60000 }
 }));
 
 // app.use(function (req, res, next) {
@@ -21,17 +22,21 @@ app.use(session({
 // });
 
 app.use(function (req, res, next) {
+	if(!req.session.number) {
+		req.session.number = Math.floor(Math.random()*100);
+	}
     console.log('session', req.session);
     next();
 });
 
 app.post('/login', function(req, res, next) {
-	User.findOne({email: req.body.email, password: req.body.password}).exec()
+	return User.findOne({email: req.body.email, password: req.body.password}).exec()
 	.then(function(user) {
 		if (!user) res.sendStatus(401);
 		else {
 			req.session.userId = user._id
-			res.sendStatus(200)
+			//res.sendStatus(200)
+			res.send(user);
 		}
 	})
 	.then(null, next)
