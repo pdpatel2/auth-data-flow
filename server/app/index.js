@@ -3,6 +3,7 @@
 var app = require('express')();
 var path = require('path');
 var session = require('express-session');
+var passport = require('passport')
 var User = require('../api/users/user.model');
 
 app.use(require('./logging.middleware'));
@@ -14,6 +15,9 @@ app.use(session({
     secret: 'tongiscool'
     //cookie: { maxAge: 60000 }
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app.use(function (req, res, next) {
 //   if (!req.session.counter) req.session.counter = 0;
@@ -35,11 +39,15 @@ app.post('/login', function(req, res, next) {
 		if (!user) res.sendStatus(401);
 		else {
 			req.session.userId = user._id
-			//res.sendStatus(200)
 			res.send(user);
 		}
 	})
 	.then(null, next)
+})
+
+app.put('/logout', function(req, res, next) {
+	req.session.destroy()
+	res.end()
 })
 
 app.use(require('./statics.middleware'));
